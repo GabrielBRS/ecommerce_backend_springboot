@@ -1,0 +1,111 @@
+package com.gabrielsousa.config;
+
+import java.util.Arrays;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class SecurityConfig {
+
+//	@Autowired
+//	private Environment env;
+
+	private static final String[] PUBLIC_MATCHERS = { 
+			"/h2-console/**", "/products", 
+			"/categories", 
+          "/clients/**",
+			"/requests" 
+	};
+
+	private static final String[] PUBLIC_MATCHERS_GET = {
+			"/products/**",
+          "/clients/**",
+			"/categories/**",
+			"/requests",
+			"/states/**"
+	};
+
+	private static final String[] PUBLIC_MATCHERS_POST = {
+			"/clients/**",
+			"/requests",
+			"/auth/forgot/**"
+	};
+	
+//	@Bean
+//    public UserDetailsService userDetailsService() {
+//        return new ShopmeUserDetailsService();
+//    }
+ 
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+ 
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+     
+        http.authorizeRequests()
+        		.antMatchers(HttpMethod.GET,PUBLIC_MATCHERS).permitAll()
+        		.antMatchers(HttpMethod.GET,PUBLIC_MATCHERS_GET).permitAll()
+        		.antMatchers(HttpMethod.POST,PUBLIC_MATCHERS_POST).permitAll()
+//                .antMatchers("/users/**", "/settings/**").hasAuthority("Admin")
+//                .hasAnyAuthority("Admin", "Editor", "Salesperson")
+//                .hasAnyAuthority("Admin", "Editor", "Salesperson", "Shipper")
+                .anyRequest().authenticated()
+//                .and().formLogin()
+//                .loginPage("/login")
+//                    .usernameParameter("email")
+//                    .permitAll()
+//                .and()
+//                .rememberMe().key("AbcdEfghIjklmNopQrsTuvXyz_0123456789")
+//                .and()
+//                .logout().permitAll()
+                ;
+ 
+        http.headers().frameOptions().sameOrigin();
+ 
+        return http.build();
+    }
+ 
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**");
+    }
+ 
+    @Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
+		configuration.setAllowedMethods(Arrays.asList("http://localhost:8000"));
+		configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
+		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
+    
+//    @Bean
+//    public WebMvcConfigurer corsConfigurer() 
+//    {
+//        return new WebMvcConfigurer() {
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/**").allowedOrigins("http://localhost:8000");
+//            }
+//        };
+    }
+    
+}

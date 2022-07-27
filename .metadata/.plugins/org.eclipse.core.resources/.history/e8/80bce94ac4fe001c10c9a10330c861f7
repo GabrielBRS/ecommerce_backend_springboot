@@ -1,0 +1,30 @@
+#spring.jpa.properties.javax.persistence.schema-generation.create-source=metadata
+#spring.jpa.properties.javax.persistence.schema-generation.scripts.action=create
+#spring.jpa.properties.javax.persistence.schema-generation.scripts.create-target=create.sql
+#spring.jpa.properties.hibernate.hbm2ddl.delimiter=;
+
+#Banco de dados na nuvem
+spring.datasource.url=${DATABASE_URL}
+
+#spring.datasource.url=${SPRING_DATASOURCE_URL}
+#spring.datasource.username=${SPRING_DATASOURCE_USERNAME}
+#spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
+#spring.datasource.driverClassName=${SPRING_DATASOURCE_DRIVER-CLASS-NAME}
+#spring.jpa.database-platform=${SPRING_JPA_DATABASE-PLATFORM}
+#spring.datasource.testWhileIdle=true
+#spring.datasource.validationQuery=SELECT 1
+#spring.jpa.show-sql=true
+#spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+
+spring.jpa.hibernate.ddl-auto=none
+
+
+##Banco de dados local
+#spring.datasource.url=jdbc:postgresql://localhost:5432/springionic
+#spring.datasource.username=postgres
+#spring.datasource.password=Gabriel1995!
+##spring.jpa.hibernate.ddl-auto=create
+#spring.jpa.show-sql=false
+#spring.jpa.properties.hibernate.format_sql=false
+#
+#spring.sql.init.mode=always

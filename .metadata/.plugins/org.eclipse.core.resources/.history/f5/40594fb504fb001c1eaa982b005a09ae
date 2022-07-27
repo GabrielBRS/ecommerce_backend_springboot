@@ -1,0 +1,19 @@
+package com.gabrielsousa.repository;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.gabrielsousa.domain.Adress;
+import com.gabrielsousa.domain.Request;
+import com.nelioalves.cursomc.domain.Cliente;
+import com.nelioalves.cursomc.domain.Pedido;
+
+@Repository
+public interface RequestRepository extends JpaRepository<Request, Integer> {
+	
+	@Transactional(readOnly=true)
+	Page<Pedido> findByCliente(Cliente cliente, Pageable pageRequest);
+}

@@ -1,0 +1,5 @@
+package com.gabrielsousa.service;
+
+public class UserDetailsServiceImpl {
+
+}
